@@ -5,7 +5,7 @@
 # chkconfig: 2345 95 05
 # description: TeamSpeak is a VOIP system for gamers.
 # processname: tss
-# pidfile: /var/run/tss.pid
+# pidfile: /var/lib/tss/server.pid
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -25,9 +25,17 @@ fi
 RETVAL=0
 case "$1" in
   start)
-	if [ -f /var/lock/subsys/tss ]; then
+	if [ ! -f /var/lock/subsys/tss ]; then
 		msg_starting TeamSpeak
-		daemon --user nobody /usr/bin/tss -LOG=/var/log/tss -PID=/var/run/tss.pid
+		daemon --user tss /usr/lib/tss/tss \
+			-db=/var/lib/tss/server.dbs \
+			-ini=/var/lib/tss/server.ini \
+			-log=/var/lib/tss/server.log \
+			-pid=/var/lib/tss/server.pid \
+			-badnames=/var/lib/tss/bad_names.txt \
+			-httpdocs=/usr/share/tss/httpdocs \
+			-tcpquerydocs=/usr/share/tss/tcpquerydocs \
+
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tss
 	else
@@ -38,7 +46,7 @@ case "$1" in
 	if [ -f /var/lock/subsys/tss ]; then
 		msg_stopping TeamSpeak
 		killproc tss
-		rm -f /var/run/tss.pid /var/lock/subsys/tss
+		rm -f /var/lib/tss/server.pid /var/lock/subsys/tss
 	else
 		msg_not_running TeamSpeak
 	fi
