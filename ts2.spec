@@ -6,6 +6,7 @@ Release:	1
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
 Source0:	ftp://ftp.teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
+# Source0-md5:	b0ac9a065c5a4cd8b7020d8e6d56b879
 Source1:	%{name}.init
 URL:		http://www.teamspeak.org/
 ExclusiveArch:	%{ix86}
