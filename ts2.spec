@@ -1,16 +1,20 @@
 Summary:	VoIP server for gamers
 Summary(pl):	Serwer VoIP dla graczy
 Name:		ts2
-Version:	rc2_201916
-Release:	1
+Version:	rc2_20201
+Release:	1.10
+Epoch:		1
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
 Source0:	ftp://ftp.teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
-# Source0-md5:	b0ac9a065c5a4cd8b7020d8e6d56b879
+# Source0-md5:	e1f0dace646affc80c1e0d83fa7f9161
 Source1:	%{name}.init
 URL:		http://www.teamspeak.org/
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define	uid	139
+%define	_localstatedir	/var/lib/tss
 
 %description
 TeamSpeak was primarily designed to work for people who are behind a
@@ -31,16 +35,81 @@ przy pomocy kodeka CELP z maksimum 650 bajtów/sekundê.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},/etc/rc.d/init.d}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
+	$RPM_BUILD_ROOT%{_libdir}/tss/{,{mysql,sqlite}_sql,tcpquerydocs} \
+	$RPM_BUILD_ROOT%{_datadir}/tss \
+	$RPM_BUILD_ROOT%{_localstatedir}/tss \
 
-install server_linux $RPM_BUILD_ROOT%{_bindir}/tss
+install server_linux $RPM_BUILD_ROOT%{_libdir}/tss/tss
+install *.so $RPM_BUILD_ROOT%{_libdir}/tss
+install mysql_sql/* $RPM_BUILD_ROOT%{_libdir}/tss/mysql_sql
+install sqlite_sql/* $RPM_BUILD_ROOT%{_libdir}/tss/sqlite_sql
+
+cp -a httpdocs $RPM_BUILD_ROOT%{_datadir}/tss
+cp -a tcpquerydocs $RPM_BUILD_ROOT%{_datadir}/tss
+
+> $RPM_BUILD_ROOT%{_localstatedir}/bad_names.txt
+> $RPM_BUILD_ROOT%{_localstatedir}/server.dbs
+> $RPM_BUILD_ROOT%{_localstatedir}/server.ini
+> $RPM_BUILD_ROOT%{_localstatedir}/server.log
+
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tss
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+if [ -n "`/bin/id -u tss 2>/dev/null`" ]; then
+	if [ "`/bin/id -u tss`" != "%{uid}" ]; then
+		echo "Error: user tss doesn't have uid=%{uid}. Correct this before installing %{name}." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u %{uid} \
+		-d /var/lib/tss -s /bin/sh -g daemon \
+		-c "TeamSpeak Server" tss 1>&2
+fi
+
+%post
+/sbin/chkconfig --add tss
+if [ -f /var/lock/subsys/tss ]; then
+	/etc/rc.d/init.d/mysql tss >&2
+else
+	echo "Run \"/etc/rc.d/init.d/tss start\" to start TeamSpeak." >&2
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/tss ]; then
+		/etc/rc.d/init.d/tss stop
+	fi
+	/sbin/chkconfig --del tss
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+    %userremove tss
+fi
+
 %files
 %defattr(644,root,root,755)
-%doc Readme.txt slicense.txt httpdocs
-%attr(755,root,root) %{_bindir}/*
+%doc README changelog.txt
+%doc INSTALL INSTALL.mysql
 %attr(754,root,root) /etc/rc.d/init.d/tss
+
+%dir %attr(755,root,root) %{_libdir}/tss
+%attr(755,root,root) %{_libdir}/tss/tss
+%attr(755,root,root) %{_libdir}/tss/*.so
+
+%dir %attr(755,root,root) %{_libdir}/tss/mysql_sql
+%attr(644,root,root) %{_libdir}/tss/mysql_sql/*.sql
+%dir %attr(755,root,root) %{_libdir}/tss/sqlite_sql
+%attr(644,root,root) %{_libdir}/tss/sqlite_sql/*.sql
+
+%{_datadir}/tss
+
+%dir %attr(700,tss,root) %{_localstatedir}
+%ghost %attr(700,tss,root) %{_localstatedir}/bad_names.txt
+%ghost %attr(700,tss,root) %{_localstatedir}/server.dbs
+%ghost %attr(700,tss,root) %{_localstatedir}/server.ini
+%ghost %attr(700,tss,root) %{_localstatedir}/server.log
