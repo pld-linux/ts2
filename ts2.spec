@@ -2,7 +2,7 @@ Summary:	VoIP server for gamers
 Summary(pl):	Serwer VoIP dla graczy
 Name:		ts2
 Version:	rc2_20201
-Release:	1.10
+Release:	2
 Epoch:		1
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
