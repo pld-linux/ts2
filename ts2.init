@@ -22,46 +22,39 @@ else
 	exit 0
 fi
 
-
+RETVAL=0
 case "$1" in
   start)
 	if [ -f /var/lock/subsys/tss ]; then
-		msg_already_running TeamSpeak
-		exit 1
-	else
 		msg_starting TeamSpeak
 		daemon --user nobody /usr/bin/tss -LOG=/var/log/tss -PID=/var/run/tss.pid
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/tss
+	else
+		msg_already_running TeamSpeak
 	fi
 	;;
   stop)
 	if [ -f /var/lock/subsys/tss ]; then
 		msg_stopping TeamSpeak
 		killproc tss
-		RETVAL=$?
 		rm -f /var/run/tss.pid /var/lock/subsys/tss
 	else
 		msg_not_running TeamSpeak
-		exit 1
 	fi
 	;;
-  restart|reload)
+  restart|force-reload)
 	$0 stop
 	$0 start
 	exit $?
 	;;
   status)
 	status tss
-	;;
-  force-reload)
-	$0 stop && $0 start
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
-	exit 1
-	;;
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
