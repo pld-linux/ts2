@@ -6,10 +6,10 @@ Release:	2
 Epoch:		1
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
-Source0:	ftp://ftp.teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
+Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/ts2_server_%{version}.tar.bz2
 # Source0-md5:	e1f0dace646affc80c1e0d83fa7f9161
 Source1:	%{name}.init
-URL:		http://www.teamspeak.org/
+URL:		http://www.goteamspeak.com/
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
