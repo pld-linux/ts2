@@ -8,6 +8,7 @@ Group:		Networking/Daemons
 Source0:	ftp://ftp.teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
 Source1:	%{name}.init
 URL:		http://www.teamspeak.org/
+ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
