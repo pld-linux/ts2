@@ -10,6 +10,11 @@ Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/ts2_server_%{v
 # Source0-md5:	e1f0dace646affc80c1e0d83fa7f9161
 Source1:	%{name}.init
 URL:		http://www.goteamspeak.com/
+BuildRequires:	rpmbuild(macros) >= 1.202
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
+Provides:	user(tss)
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -59,16 +64,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tss
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/bin/id -u tss 2>/dev/null`" ]; then
-	if [ "`/bin/id -u tss`" != "%{uid}" ]; then
-		echo "Error: user tss doesn't have uid=%{uid}. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u %{uid} \
-		-d /var/lib/tss -s /bin/sh -g daemon \
-		-c "TeamSpeak Server" tss 1>&2
-fi
+%useradd -u %{uid} -d /var/lib/tss -s /bin/sh -g daemon -c "TeamSpeak Server" tss
 
 %post
 /sbin/chkconfig --add tss
