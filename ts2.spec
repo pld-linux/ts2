@@ -6,20 +6,21 @@ Release:	3
 Epoch:		1
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
-Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/ts2_server_%{version}.tar.bz2
+Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
 # Source0-md5:	e1f0dace646affc80c1e0d83fa7f9161
 Source1:	%{name}.init
 URL:		http://www.goteamspeak.com/
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/userdel
+Requires:	rc-scripts
 Provides:	user(tss)
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define	uid	139
-%define	_localstatedir	/var/lib/tss
+%define		_localstatedir	/var/lib/tss
 
 %description
 TeamSpeak was primarily designed to work for people who are behind a
@@ -64,27 +65,21 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tss
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%useradd -u %{uid} -d /var/lib/tss -s /bin/sh -g daemon -c "TeamSpeak Server" tss
+%useradd -u 139 -d /var/lib/tss -s /bin/sh -g daemon -c "TeamSpeak Server" tss
 
 %post
 /sbin/chkconfig --add tss
-if [ -f /var/lock/subsys/tss ]; then
-	/etc/rc.d/init.d/tss restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/tss start\" to start TeamSpeak." >&2
-fi
+%service tss restart "TeamSpeak Server"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/tss ]; then
-		/etc/rc.d/init.d/tss stop
-	fi
+	%service tss stop
 	/sbin/chkconfig --del tss
 fi
 
 %postun
 if [ "$1" = "0" ]; then
-    %userremove tss
+	%userremove tss
 fi
 
 %files
