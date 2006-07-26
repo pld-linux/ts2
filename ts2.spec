@@ -88,14 +88,14 @@ fi
 %doc INSTALL INSTALL.mysql
 %attr(754,root,root) /etc/rc.d/init.d/tss
 
-%dir %attr(755,root,root) %{_libdir}/tss
+%dir %{_libdir}/tss
 %attr(755,root,root) %{_libdir}/tss/tss
 %attr(755,root,root) %{_libdir}/tss/*.so
 
-%dir %attr(755,root,root) %{_libdir}/tss/mysql_sql
-%attr(644,root,root) %{_libdir}/tss/mysql_sql/*.sql
-%dir %attr(755,root,root) %{_libdir}/tss/sqlite_sql
-%attr(644,root,root) %{_libdir}/tss/sqlite_sql/*.sql
+%dir %{_libdir}/tss/mysql_sql
+%{_libdir}/tss/mysql_sql/*.sql
+%dir %{_libdir}/tss/sqlite_sql
+%{_libdir}/tss/sqlite_sql/*.sql
 
 %{_datadir}/tss
 
