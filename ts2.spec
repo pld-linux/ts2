@@ -1,5 +1,5 @@
 Summary:	VoIP server for gamers
-Summary(pl):	Serwer VoIP dla graczy
+Summary(pl.UTF-8):   Serwer VoIP dla graczy
 Name:		ts2
 Version:	rc2_20201
 Release:	3
@@ -29,12 +29,12 @@ That mean to us it had to use as little bandwidth as possible, while
 having a reasonable voice quality. The authors think they achieved
 that with the 650 bytes/s maximum CELP codec.
 
-%description -l pl
-TeamSpeak zosta³ zaprojektowany g³ównie do pracy dla ludzi za
-routerami z maskowaniem adresów (dziel±cymi Internet). Ponadto by³
-pomy¶lany dla graczy. Oznacza to, ¿e ma zu¿ywaæ jak najmniej pasma,
-zapewniaj±c rozs±dn± jako¶æ g³osu. Autorzy uwa¿aj±, ¿e osi±gnêli to
-przy pomocy kodeka CELP z maksimum 650 bajtów/sekundê.
+%description -l pl.UTF-8
+TeamSpeak zostaÅ‚ zaprojektowany gÅ‚Ã³wnie do pracy dla ludzi za
+routerami z maskowaniem adresÃ³w (dzielÄ…cymi Internet). Ponadto byÅ‚
+pomyÅ›lany dla graczy. Oznacza to, Å¼e ma zuÅ¼ywaÄ‡ jak najmniej pasma,
+zapewniajÄ…c rozsÄ…dnÄ… jakoÅ›Ä‡ gÅ‚osu. Autorzy uwaÅ¼ajÄ…, Å¼e osiÄ…gnÄ™li to
+przy pomocy kodeka CELP z maksimum 650 bajtÃ³w/sekundÄ™.
 
 %prep
 %setup -q -n tss2_rc2
