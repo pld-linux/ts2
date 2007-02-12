@@ -1,5 +1,5 @@
 Summary:	VoIP server for gamers
-Summary(pl.UTF-8):   Serwer VoIP dla graczy
+Summary(pl.UTF-8):	Serwer VoIP dla graczy
 Name:		ts2
 Version:	rc2_20201
 Release:	3
