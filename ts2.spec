@@ -1,13 +1,13 @@
 Summary:	VoIP server for gamers
 Summary(pl.UTF-8):	Serwer VoIP dla graczy
 Name:		ts2
-Version:	rc2_20201
-Release:	3
-Epoch:		1
+Version:	rc2_202319
+Release:	0.1
+Epoch:		2
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
 Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
-# Source0-md5:	e1f0dace646affc80c1e0d83fa7f9161
+# Source0-md5:	05e2bdec80eeed3d935eacb9ada3623e
 Source1:	%{name}.init
 URL:		http://www.goteamspeak.com/
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -84,7 +84,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README changelog.txt
+%doc README
 %doc INSTALL INSTALL.mysql
 %attr(754,root,root) /etc/rc.d/init.d/tss
 
