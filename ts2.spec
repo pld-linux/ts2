@@ -1,4 +1,5 @@
 %define		main_version	rc2_202319
+%define		file_version	202401
 Summary:	VoIP server for gamers
 Summary(pl.UTF-8):	Serwer VoIP dla graczy
 Name:		ts2
@@ -10,7 +11,7 @@ Group:		Networking/Daemons
 Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/%{name}_server_%{main_version}.tar.bz2
 # Source0-md5:	05e2bdec80eeed3d935eacb9ada3623e
 Source1:	%{name}.init
-Source2:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/developer/server/%{version}/server_linux
+Source2:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/developer/server/%{file_version}/server_linux
 # Source2-md5:	55dac0e5c05760f1e8232b32a2920db0
 URL:		http://www.goteamspeak.com/
 BuildRequires:	rpmbuild(macros) >= 1.268
