@@ -1,14 +1,17 @@
+%define		main_version	rc2_202319
 Summary:	VoIP server for gamers
 Summary(pl.UTF-8):	Serwer VoIP dla graczy
 Name:		ts2
-Version:	rc2_202319
-Release:	0.1
+Version:	rc2_202401
+Release:	1
 Epoch:		2
 License:	redistributable for non-commercial use
 Group:		Networking/Daemons
-Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/%{name}_server_%{version}.tar.bz2
+Source0:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/releases/%{name}_server_%{main_version}.tar.bz2
 # Source0-md5:	05e2bdec80eeed3d935eacb9ada3623e
 Source1:	%{name}.init
+Source2:	ftp://ftp.freenet.de/pub/4players/teamspeak.org/developer/server/%{version}/server_linux
+# Source2-md5:	55dac0e5c05760f1e8232b32a2920db0
 URL:		http://www.goteamspeak.com/
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
@@ -46,7 +49,8 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
 	$RPM_BUILD_ROOT%{_datadir}/tss \
 	$RPM_BUILD_ROOT%{_localstatedir}/tss \
 
-install server_linux $RPM_BUILD_ROOT%{_libdir}/tss/tss
+# removed binary from main version:
+# install server_linux $RPM_BUILD_ROOT%{_libdir}/tss/tss
 install *.so $RPM_BUILD_ROOT%{_libdir}/tss
 install mysql_sql/* $RPM_BUILD_ROOT%{_libdir}/tss/mysql_sql
 install sqlite_sql/* $RPM_BUILD_ROOT%{_libdir}/tss/sqlite_sql
@@ -60,6 +64,8 @@ cp -a tcpquerydocs $RPM_BUILD_ROOT%{_datadir}/tss
 > $RPM_BUILD_ROOT%{_localstatedir}/server.log
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/tss
+# new version binary:
+install %{SOURCE2} $RPM_BUILD_ROOT%{_libdir}/tss/tss
 
 %clean
 rm -rf $RPM_BUILD_ROOT
