@@ -107,7 +107,7 @@ fi
 %{_datadir}/tss
 
 %dir %attr(700,tss,root) %{_localstatedir}
-%ghost %attr(700,tss,root) %{_localstatedir}/bad_names.txt
-%ghost %attr(700,tss,root) %{_localstatedir}/server.dbs
-%ghost %attr(700,tss,root) %{_localstatedir}/server.ini
-%ghost %attr(700,tss,root) %{_localstatedir}/server.log
+%attr(700,tss,root) %ghost %{_localstatedir}/bad_names.txt
+%attr(700,tss,root) %ghost %{_localstatedir}/server.dbs
+%attr(700,tss,root) %ghost %{_localstatedir}/server.ini
+%attr(700,tss,root) %ghost %{_localstatedir}/server.log
